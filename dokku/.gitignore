@@ -1,0 +1,5 @@
+.chef
+vendor/cookbooks
+.bundle
+.ruby-version
+tmp/

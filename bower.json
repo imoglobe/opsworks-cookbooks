@@ -1,0 +1,7 @@
+{
+  "name": "opsworks-cookbooks",
+  "version": "0.0.0",
+  "dependencies": {
+    "dokku": "git://github.com/fgrehm/chef-dokku.git#master"
+  }
+}

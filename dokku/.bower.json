@@ -1,0 +1,13 @@
+{
+  "name": "dokku",
+  "homepage": "https://github.com/fgrehm/chef-dokku",
+  "_release": "2be2402be9",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "2be2402be9b01b26d9066d142c0d80bff5fe3af8"
+  },
+  "_source": "git://github.com/fgrehm/chef-dokku.git",
+  "_target": "master",
+  "_originalSource": "git://github.com/fgrehm/chef-dokku.git"
+}
