@@ -1,0 +1,33 @@
+{
+  "name": "golang",
+  "description": "Installs go programming language",
+  "long_description": "# <a name=\"title\"></a> golang (Chef cookbook for Go)\n\n## <a name=\"description\"></a> Description\n\nChef cookbook for [Go programming language](http://golang.org/).\n\n## <a name=\"requirements\"></a> Requirements\n\n### <a name=\"requirements-platform\"></a> Platform\n\n* Ubuntu (10.04/11.04/12.04/13.04)\n* Debian (6.0)\n\n**Notes**: This cookbook has been tested on the listed platforms. It\nmay work on other platforms with or without modification. Please\n[report issues](/issues) any additional platforms so they can be added.\n\n\n## <a name=\"usage\"></a> Usage\n\n#### golang::default\n\nJust include `golang` in your node's `run_list`:\n\n```json\n{\n  \"name\":\"my_node\",\n  \"run_list\": [\n    \"recipe[golang]\"\n  ]\n}\n```\n\n#### golang::packages\n\nTo install Go packages using node attributes, include `golang::packages` in your node's `run_list`, and use the `['go']['packages']` attribute:\n\n```json\n{\n  \"name\":\"my_node\",\n  \"go\": {\n    \"packages\": [\n      \"launchpad.net/gocheck\"\n    ]\n  },\n  \"run_list\": [\n    \"recipe[golang::packages]\"\n  ]\n}\n```\n\n\n## <a name=\"attributes\"></a> Attributes\n\n#### golang::default\n<table>\n  <tr>\n    <th>Key</th>\n    <th>Type</th>\n    <th>Description</th>\n    <th>Default</th>\n  </tr>\n  <tr>\n    <td><tt>['go']['version']</tt></td>\n    <td>String</td>\n    <td>Go version</td>\n    <td><tt>1.1.2</tt></td>\n  </tr>\n  <tr>\n    <td><tt>['go']['platform']</tt></td>\n    <td>String</td>\n    <td>`amd64` or `i386`</td>\n    <td><tt>amd64</tt></td>\n  </tr>\n    <tr>\n    <td><tt>['go']['scm']</tt></td>\n    <td>Boolean</td>\n    <td>install SCM dependencies `git`, `hg`, and `bzr`</td>\n    <td><tt>true</tt></td>\n  </tr>\n  </tr>\n    <tr>\n    <td><tt>['go']['packages']</tt></td>\n    <td>Array</td>\n    <td>Go packages to install when using the `golang::packages` recipe</td>\n    <td><tt>[]</tt></td>\n  </tr>\n</table>\n\n## <a name=\"testing\"></a> Testing\n\nThis project have [foodcritic](https://github.com/acrmp/foodcritic) for syntax checking and\n[test-kitchen](https://github.com/opscode/test-kitchen) for integration testing. You can run the test suite by\ntyping: `rake kitchen:all` (may be slow for the first time).\n\nIn order to run these tests, the following\n[requirements](https://github.com/opscode/kitchen-vagrant#-requirements) must be\nsatisfied:\n\n* [Vagrant](http://vagrantup.com/) (>= 1.1.0)\n* [VirtualBox](https://www.virtualbox.org/)\n* [Vagrant Berkshelf Plugin](http://rubygems.org/gems/vagrant-berkshelf)\n\n## <a name=\"contributing\"></a> Contributing\n\n1. Fork the repository\n2. Create a named feature branch (like `add_component_x`)\n3. Write you change\n4. Test it by running `rake kitchen:all`\n5. Submit a Pull Request\n\n## <a name=\"contributors\"></a> Contributors\n\n* **[@akalyaev](https://github.com/akalyaev)**\n* **[@xaprb](https://github.com/xaprb)**\n* **[@crowdmatt](https://github.com/crowdmatt)**\n* **[@buth](https://github.com/buth)**\n* **[@computerlyrik](https://github.com/computerlyrik)**\n\n",
+  "maintainer": "Alexander Rozhnov",
+  "maintainer_email": "gnox73@gmail.com",
+  "license": "Apache 2.0",
+  "platforms": {
+    "debian": ">= 0.0.0",
+    "ubuntu": ">= 0.0.0"
+  },
+  "dependencies": {
+  },
+  "recommendations": {
+  },
+  "suggestions": {
+  },
+  "conflicting": {
+  },
+  "providing": {
+  },
+  "replacing": {
+  },
+  "attributes": {
+  },
+  "groupings": {
+  },
+  "recipes": {
+    "golang": "Installs go programing language.",
+    "golang::packages": "Installs go packages and SCM requirements."
+  },
+  "version": "1.2.0"
+}

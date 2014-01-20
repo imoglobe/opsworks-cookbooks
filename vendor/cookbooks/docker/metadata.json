@@ -1,0 +1,41 @@
+{
+  "name": "docker",
+  "description": "Installs/Configures Docker",
+  "long_description": "# chef-docker [![Build Status](https://secure.travis-ci.org/bflad/chef-docker.png?branch=master)](http://travis-ci.org/bflad/chef-docker)\n\n## Description\n\nInstalls/Configures [Docker](http://docker.io). Please see [COMPATIBILITY.md](COMPATIBILITY.md) for more information about Docker versions that are tested and supported by cookbook versions along with LWRP features.\n\nThis cookbook was inspired by @thoward's docker-cookbook: https://github.com/thoward/docker-cookbook\n\n## Requirements\n\n### Platforms\n\n* Ubuntu 12.04\n* Ubuntu 12.10\n* Ubuntu 13.04\n\n### Cookbooks\n\n[Opscode Cookbooks](https://github.com/opscode-cookbooks/)\n\n* [apt](https://github.com/opscode-cookbooks/apt)\n* [git](https://github.com/opscode-cookbooks/git)\n\nThird-Party Cookbooks\n\n* [golang](https://github.com/NOX73/chef-golang)\n* [lxc](https://github.com/hw-cookbooks/lxc)\n* [modules](https://github.com/Youscribe/modules-cookbook)\n\n## Attributes\n\nThese attributes are under the `node['docker']` namespace.\n\nAttribute | Description | Type | Default\n----------|-------------|------|--------\narch | Architecture for docker binary (note: Docker only currently supports x86_64) | String | auto-detected (see attributes/default.rb)\nhttp_proxy | HTTP_PROXY environment variable | String | nil\ninstall_dir | Installation directory for docker binary | String | auto-detected (see attributes/default.rb)\ninstall_type | Installation type for docker (\"binary\", \"package\" or \"source\") | String | \"package\"\nbind_uri | The location that docker should bind to. | String | tcp://0.0.0.0:4243 (docker default)\noptions | Additional options to pass to docker. These could be flags like \"-api-enable-cors\". | String | nil\n\n### Binary Attributes\n\nThese attributes are under the `node['docker']['binary']` namespace.\n\nAttribute | Description | Type | Default\n----------|-------------|------|--------\nversion | Version of docker binary | String | latest\nurl | URL for downloading docker binary | String | auto-detected (see attributes/default.rb)\n\n### Package Attributes\n\nThese attributes are under the `node['docker']['package']` namespace.\n\nAttribute | Description | Type | Default\n----------|-------------|------|--------\ndistribution | Distribution for docker packages | String | auto-detected (see attributes/default.rb)\nrepo_url | Repository URL for docker packages | String | auto-detected (see attributes/default.rb)\n\n### Source Attributes\n\nThese attributes are under the `node['docker']['source']` namespace.\n\nAttribute | Description | Type | Default\n----------|-------------|------|--------\nref | Repository reference for docker source | String | \"master\"\nurl | Repository URL for docker source | String | \"https://github.com/dotcloud/docker.git\"\n\n## Recipes\n\n* `recipe[docker]` Installs/Configures Docker\n* `recipe[docker::aufs]` Installs/Loads AUFS Linux module\n* `recipe[docker::binary]` Installs Docker binary\n* `recipe[docker::package]` Installs Docker via package\n* `recipe[docker::source]` Installs Docker via source\n* `recipe[docker::upstart]` Installs/Starts Docker via Upstart\n\n## LWRPs\n\n### docker_container\n\nRun a container:\n\n    docker_container \"busybox\" do\n      command \"sleep 9999\"\n      detach true\n    end\n\nStop a running container:\n\n    docker_container \"busybox\" do\n      command \"sleep 9999\"\n      action :stop\n    end\n\nStart a stopped container:\n\n    docker_container \"busybox\" do\n      command \"sleep 9999\"\n      action :start\n    end\n\nRestart a container:\n\n    docker_container \"busybox\" do\n      command \"sleep 9999\"\n      action :restart\n    end\n\nRemove a container:\n\n    docker_container \"busybox\" do\n      command \"sleep 9999\"\n      action :remove\n    end\n\n### docker_image\n\nBuild image from Dockerfile:\n\n    docker_image \"myImage\" do\n      tag \"myTag\"\n      dockerfile myImageDockerfile\n      action :build\n    end\n\nBuild image from remote repository:\n\n    docker_image \"myImage\" do\n      image_url \"example.com/foo/myImage\"\n      tag \"myTag\"\n      action :build\n    end\n\nPull latest image:\n\n    docker_image \"busybox\"\n\nPull tagged image:\n\n    docker_image \"bflad/test\" do\n      tag \"not-latest\"\n    end\n\nImport image from URL:\n\n    docker_image \"test\" do\n      image_url \"https://example.com/testimage.tgz\"\n      action :import\n    end\n\nImport image from URL with repository/tag information:\n\n    docker_image \"test\" do\n      repository \"bflad/test\"\n      tag \"not-latest\"\n      action :import\n    end\n\nRemove image:\n\n    docker_image \"busybox\" do\n      action :remove\n    end\n\n## Usage\n\n### Default Installation\n\n* Add `recipe[docker]` to your node's run list\n\n## Testing and Development\n\n### Vagrant\n\nHere's how you can quickly get testing or developing against the cookbook thanks to [Vagrant](http://vagrantup.com/) and [Berkshelf](http://berkshelf.com/).\n\n    vagrant plugin install vagrant-berkshelf\n    vagrant plugin install vagrant-omnibus\n    git clone git://github.com/bflad/chef-docker.git\n    cd chef-docker\n    vagrant up BOX # BOX being ubuntu1204, ubuntu1210, or ubuntu1304\n\nYou can then SSH into the running VM using the `vagrant ssh BOX` command.\n\nThe VM can easily be stopped and deleted with the `vagrant destroy` command. Please see the official [Vagrant documentation](http://docs.vagrantup.com/v2/cli/index.html) for a more in depth explanation of available commands.\n\n### Test Kitchen\n\nPlease see documentation in: [TESTING.md](TESTING.md)\n\n## Contributing\n\nPlease use standard Github issues/pull requests and if possible, in combination with testing on the Vagrant boxes or Test Kitchen suite.\n\n## Maintainers\n\n* Brian Flad (<bflad417@gmail.com>)\n",
+  "maintainer": "Brian Flad",
+  "maintainer_email": "bflad417@gmail.com",
+  "license": "Apache 2.0",
+  "platforms": {
+    "ubuntu": ">= 0.0.0"
+  },
+  "dependencies": {
+    "apt": ">= 0.0.0",
+    "git": ">= 0.0.0",
+    "golang": ">= 0.0.0",
+    "lxc": ">= 0.0.0",
+    "modules": ">= 0.0.0"
+  },
+  "recommendations": {
+  },
+  "suggestions": {
+  },
+  "conflicting": {
+  },
+  "providing": {
+  },
+  "replacing": {
+  },
+  "attributes": {
+  },
+  "groupings": {
+  },
+  "recipes": {
+    "docker": "Installs/Configures Docker",
+    "docker::aufs": "Installs/Loads AUFS Linux module",
+    "docker::binary": "Installs Docker binary",
+    "docker::package": "Installs Docker via package",
+    "docker::source": "Installs Docker via source",
+    "docker::upstart": "Installs/Starts Docker via Upstart"
+  },
+  "version": "0.9.0"
+}

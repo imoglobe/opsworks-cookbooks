@@ -1,0 +1,15 @@
+description     "Run dockerd"
+
+start on runlevel [2345]
+stop on runlevel [!2345]
+
+# if you want it to automatically restart if it crashes, leave the next line in
+respawn
+
+script
+    <% if node['docker']['http_proxy'] %>
+    export HTTP_PROXY=<%= node['docker']['http_proxy'] %>
+    <% end %>
+    test -f /etc/default/locale && . /etc/default/locale || true
+    LANG=$LANG LC_ALL=$LANG <%= node['docker']['install_dir'] %>/docker -d<% if node['docker']['bind_uri'] %> -H="<%= node['docker']['bind_uri'] %>"<% end %><% if node['docker']['options'] %> <%= node['docker']['options'] %><% end %>
+end script
