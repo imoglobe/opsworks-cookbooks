@@ -12,10 +12,4 @@ node[:deploy].each do |application, deploy|
 		deploy_data deploy
 		app application
 	end
-
-  	git deploy[:deploy_to] do
-		repository node['dokku']['git_repository']
-		reference node['dokku']['git_revision']
-		action :push
-	end
 end
