@@ -1,11 +1,11 @@
 site :opscode
 
-cookbook 'apt'
-cookbook 'git'
-cookbook 'build-essential'
-cookbook 'nginx', '>= 1.6'
-cookbook 'docker', '>= 0.9.0'
-cookbook 'user'
-cookbook 'sudo'
+cookbook 'apt', rel: 'apt'
+cookbook 'git', rel: 'git'
+cookbook 'build-essential', rel: 'build-essential'
+cookbook 'nginx', '>= 1.6', rel: 'nginx'
+cookbook 'docker', '>= 0.9.0', rel: 'docker'
+cookbook 'user', rel: 'user'
+cookbook 'sudo', rel: 'sudo'
 
 metadata
