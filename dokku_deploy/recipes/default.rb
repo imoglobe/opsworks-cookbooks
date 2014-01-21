@@ -15,7 +15,7 @@ node[:deploy].each do |application, deploy|
 		app application
 	end
 
-	template "#{node[:dokku][:root]}/#{application[:domains]}/ssl/server.crt" do
+	template "#{node[:dokku][:root]}/#{application[:name]}/ssl/server.crt" do
 		mode '0600'
 		owner 'dokku'
 		source "ssl.key.erb"
@@ -26,7 +26,7 @@ node[:deploy].each do |application, deploy|
 		action :create_if_missing
 	end
 
-	template "#{node[:dokku][:root]}/#{application[:domains]}/ssl/server.key" do
+	template "#{node[:dokku][:root]}/#{application[:name]}/ssl/server.key" do
 		mode '0600'
 		owner 'dokku'
 		source "ssl.key.erb"
@@ -37,7 +37,7 @@ node[:deploy].each do |application, deploy|
 		action :create_if_missing
 	end
 
-	template "#{node[:dokku][:root]}/#{application[:domains]}/ssl/server.ca" do
+	template "#{node[:dokku][:root]}/#{application[:name]}/ssl/server.ca" do
 		mode '0600'
 		owner 'dokku'
 		source "ssl.key.erb"
@@ -49,8 +49,7 @@ node[:deploy].each do |application, deploy|
 	end
 
 	execute "git push" do
-		command "git push ubuntu@localhost:#{application[:domains]} master"
+		command "git push ubuntu@localhost:#{application[:name]} master"
 		cwd deploy[:deploy_to]
-		user app_user
 	end
 end
