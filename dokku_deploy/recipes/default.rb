@@ -1,4 +1,6 @@
-include_recipe 'deploy'
+%w{deploy git}.each do |dep|
+  include_recipe dep
+end
 
 node[:deploy].each do |application, deploy|
 
