@@ -8,9 +8,11 @@ version          '0.2.0'
 
 supports 'ubuntu', '= 13.04'
 
-%w{apt git build-essential user sudo}.each do |dep|
-  depends dep
-end
+depends "apt"
+depends "git"
+depends "build-essential"
+depends "user"
+depends "sudo"
 
 depends 'nginx', '~> 2.2.0'
 depends 'docker', '~> 0.24.2'
