@@ -1,9 +1,8 @@
 %w{deploy}.each do |dep|
   include_recipe dep
 end
-Chef::Log.info(node[:deploy])
+
 node[:deploy].each do |application, deploy|
-	Chef::Log.info(deploy)
 
 	opsworks_deploy_dir do
 		user deploy[:user]
@@ -18,7 +17,7 @@ node[:deploy].each do |application, deploy|
 
 	if deploy[:domains]
 		Chef::Log.info(deploy)
-		
+
 		directory "#{node[:dokku][:root]}/#{deploy[:domains].first}/ssl" do
 			owner 'dokku'
 			group 'dokku'
@@ -57,10 +56,10 @@ node[:deploy].each do |application, deploy|
 			end
 			action :create_if_missing
 		end
-
-		execute "git push" do
+		Chef::Log.info(deploy[:absolute_document_root])
+		execute "git push ubuntu@localhost:#{deploy[:domains].first} #{deploy[:scm][:revision]}" do
 			command "git push ubuntu@localhost:#{deploy[:domains].first} #{deploy[:scm][:revision]}"
-			cwd deploy[:current_path]
+			cwd deploy[:absolute_document_root]
 		end	
 	end
 
