@@ -2,6 +2,16 @@
 # We are doing it this way so we can allow chef to install/configure some of our dependencies
 # instead of allowing the bootstrap script to do it
 
+bash 'set_locale' do
+  code <<-EOH
+    export LANGUAGE=en_US.UTF-8
+    export LANG=en_US.UTF-8
+    export LC_ALL=en_US.UTF-8
+    locale-gen en_US.UTF-8
+    dpkg-reconfigure locales
+  EOH
+end
+
 # Cookbook deps
 %w{apt git build-essential user}.each do |dep|
   include_recipe dep
