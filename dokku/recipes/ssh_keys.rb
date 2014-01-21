@@ -1,5 +1,5 @@
 file "#{node['dokku']['root']}/.ssh/authorized_keys" do
-  	action :remove
+  	action :delete
 
   	only_if do
       	::File.exists?("#{node['dokku']['root']}/.ssh/authorized_keys")
