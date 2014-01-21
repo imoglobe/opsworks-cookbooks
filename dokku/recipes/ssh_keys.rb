@@ -8,10 +8,8 @@ end
 
 node['dokku']['ssh_keys'].each do |user, key|
   	# TODO make this into an LWRP
-  	bash "sshcommand_acl-add_key" do
-    	cwd node['dokku']['root']
-    	code <<-EOT
-      		echo '#{key}' | sshcommand acl-add dokku #{user}
-    	EOT
-  	end
+	execute "sshcommand_acl-add_key" do
+		command "echo '#{key}' | sudo sshcommand acl-add dokku #{user}"
+		cwd node['dokku']['root']
+	end
 end
