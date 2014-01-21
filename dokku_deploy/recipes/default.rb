@@ -13,10 +13,4 @@ node[:deploy].each do |application, deploy|
 	opsworks_deploy do
 		deploy_data deploy
 	end
-
-  	git deploy[:deploy_to] do
-		repository node['dokku']['git_repository']
-		reference node['dokku']['git_revision']
-		action :push
-	end
 end
