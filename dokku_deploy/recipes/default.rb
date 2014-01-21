@@ -18,6 +18,13 @@ node[:deploy].each do |application, deploy|
 
 	if deploy[:domains]
 		Chef::Log.info(deploy)
+		
+		directory "#{node[:dokku][:root]}/#{deploy[:domains].first}/ssl" do
+			owner 'dokku'
+			group 'dokku'
+			action :create
+		end
+
 		template "#{node[:dokku][:root]}/#{deploy[:domains].first}/ssl/server.crt" do
 			mode '0600'
 			owner 'dokku'
