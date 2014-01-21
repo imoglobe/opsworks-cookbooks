@@ -3,6 +3,7 @@
 end
 
 node[:deploy].each do |application, deploy|
+	deploy[:application_type] = 'other'
 
 	opsworks_deploy_dir do
 		user deploy[:user]
@@ -14,4 +15,5 @@ node[:deploy].each do |application, deploy|
 		deploy_data deploy
 		app application
 	end
+
 end
