@@ -56,12 +56,6 @@ node[:deploy].each do |application, deploy|
 			end
 			action :create_if_missing
 		end
-		Chef::Log.info(deploy[:absolute_document_root])
-		bash "sshcommand_acl-add_key" do
-			cwd deploy[:absolute_document_root]
-			code <<-EOT
-				git push ubuntu@localhost:#{deploy[:domains].first} #{deploy[:scm][:revision]}
-			EOT
-		end
+		
 	end
 end
