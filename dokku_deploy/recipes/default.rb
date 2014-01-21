@@ -1,10 +1,10 @@
 %w{deploy}.each do |dep|
   include_recipe dep
 end
-Chef::Log.warn(node[:deploy])
+Chef::Log.info(node[:deploy])
 node[:deploy].each do |application, deploy|
-	Chef::Log.warn(application)
-	Chef::Log.warn(deploy)
+	Chef::Log.info(application)
+	Chef::Log.info(deploy)
 
 	opsworks_deploy_dir do
 		user deploy[:user]
@@ -21,9 +21,9 @@ node[:deploy].each do |application, deploy|
 		mode '0600'
 		owner 'dokku'
 		source "ssl.key.erb"
-		variables :key => application[:ssl_certificate]
+		variables :key => deploy[:ssl_certificate]
 		only_if do
-			application[:ssl_support]
+			deploy[:ssl_support]
 		end
 		action :create_if_missing
 	end
@@ -32,9 +32,9 @@ node[:deploy].each do |application, deploy|
 		mode '0600'
 		owner 'dokku'
 		source "ssl.key.erb"
-		variables :key => application[:ssl_certificate_key]
+		variables :key => deploy[:ssl_certificate_key]
 		only_if do
-			application[:ssl_support]
+			deploy[:ssl_support]
 		end
 		action :create_if_missing
 	end
@@ -43,15 +43,15 @@ node[:deploy].each do |application, deploy|
 		mode '0600'
 		owner 'dokku'
 		source "ssl.key.erb"
-		variables :key => application[:ssl_certificate_ca]
+		variables :key => deploy[:ssl_certificate_ca]
 		only_if do
-			application[:ssl_support] && application[:ssl_certificate_ca]
+			deploy[:ssl_support] && deploy[:ssl_certificate_ca]
 		end
 		action :create_if_missing
 	end
 
 	execute "git push" do
-		command "git push ubuntu@localhost:#{application} master"
+		command "git push ubuntu@localhost:#{application} #{deploy[:scm][:revision]}"
 		cwd "#{deploy[:deploy_to]}/current"
 	end
 end
