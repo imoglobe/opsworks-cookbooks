@@ -1,6 +1,6 @@
 {
   "name": "nginx",
-  "version": "2.0.0",
+  "version": "2.2.0",
   "description": "Installs and configures nginx",
   "long_description": "",
   "maintainer": "Opscode, Inc.",
@@ -22,7 +22,8 @@
     "build-essential": "~> 1.4",
     "ohai": "~> 1.1",
     "runit": "~> 1.2",
-    "yum": "~> 2.3"
+    "yum": "~> 3.0",
+    "yum-epel": ">= 0.0.0"
   },
   "recommendations": {
   },

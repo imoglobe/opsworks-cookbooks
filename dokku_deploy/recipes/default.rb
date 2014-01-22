@@ -16,6 +16,46 @@ node[:deploy].each do |application, deploy|
 	end
 
 	if deploy[:domains]
+		Chef::Log.info(deploy)
+
+		directory "#{node[:dokku][:root]}/#{deploy[:domains].first}/ssl" do
+			owner 'dokku'
+			group 'dokku'
+			action :create
+		end
+
+		template "#{node[:dokku][:root]}/#{deploy[:domains].first}/ssl/server.crt" do
+			mode '0600'
+			owner 'dokku'
+			source "ssl.key.erb"
+			variables :key => deploy[:ssl_certificate]
+			only_if do
+				deploy[:ssl_support]
+			end
+			action :create_if_missing
+		end
+
+		template "#{node[:dokku][:root]}/#{deploy[:domains].first}/ssl/server.key" do
+			mode '0600'
+			owner 'dokku'
+			source "ssl.key.erb"
+			variables :key => deploy[:ssl_certificate_key]
+			only_if do
+				deploy[:ssl_support]
+			end
+			action :create_if_missing
+		end
+
+		template "#{node[:dokku][:root]}/#{deploy[:domains].first}/ssl/server.ca" do
+			mode '0600'
+			owner 'dokku'
+			source "ssl.key.erb"
+			variables :key => deploy[:ssl_certificate_ca]
+			only_if do
+				deploy[:ssl_support] && deploy[:ssl_certificate_ca]
+			end
+			action :create_if_missing
+		end
 		
 	end
 end

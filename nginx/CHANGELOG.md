@@ -3,6 +3,44 @@ nginx Cookbook CHANGELOG
 This file is used to list changes made in each version of the nginx cookbook.
 
 
+v2.2.0
+------
+No changes. Version bump for toolchain
+
+
+v2.1.0
+------
+[COOK-3923] - Enable the list of packages installed by nginx::passenger to be configurable
+[COOK-3672] - Nginx should support the gzip_static option
+Updating for yum ~> 3.0
+Fixing up style for rubocop
+Updating test-kitchen harness
+
+
+v2.0.8
+------
+fixing metadata version error. locking to 3.0
+
+
+v2.0.6
+------
+Locking yum dependency to '< 3'
+
+
+v2.0.4
+------
+### Bug
+- **[COOK-3808](https://tickets.opscode.com/browse/COOK-3808)** - nginx::passenger run fails because of broken installation of package dependencies
+- **[COOK-3779](https://tickets.opscode.com/browse/COOK-3779)** - Build in master fails due to rubocop error
+
+
+v2.0.2
+------
+### Bug
+- **[COOK-3808](https://tickets.opscode.com/browse/COOK-3808)** - nginx::passenger run fails because of broken installation of package dependencies
+- **[COOK-3779](https://tickets.opscode.com/browse/COOK-3779)** - Build in master fails due to rubocop error
+
+
 v2.0.0
 ------
 ### Improvement

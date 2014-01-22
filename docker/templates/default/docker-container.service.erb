@@ -1,0 +1,13 @@
+[Unit]
+Description=Docker service for <%= @service_name %>
+Author=Docker Chef Cookbook
+After=docker.service
+
+[Service]
+Restart=always
+ExecStartPre=-<%= node['docker']['install_dir'] %>/docker start <%= @service_name %>
+ExecStart=<%= node['docker']['install_dir'] %>/docker wait <%= @service_name %>
+ExecStop=<%= node['docker']['install_dir'] %>/docker stop -t <%= @cmd_timeout %> <%= @service_name %>
+
+[Install]
+WantedBy=local.target

@@ -1,38 +1,40 @@
-#
-# Cookbook Name:: docker
-# Resource:: container
-#
-# Copyright 2013, Brian Flad
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-#
-
-actions :remove, :restart, :run, :start, :stop
+actions :remove, :restart, :run, :start, :stop, :wait
 
 default_action :run
 
 attribute :image, :name_attribute => true
+
+attribute :attach, :kind_of => [TrueClass, FalseClass]
+attribute :cidfile, :kind_of => [String]
+attribute :cmd_timeout, :kind_of => [Integer], :default => node['docker']['container_cmd_timeout']
 attribute :command, :kind_of => [String]
+attribute :container_name, :kind_of => [String]
+attribute :cookbook, :kind_of => [String], :default => 'docker'
+attribute :cpu_shares, :kind_of => [Fixnum]
 attribute :detach, :kind_of => [TrueClass, FalseClass]
-attribute :env, :kind_of => [String]
+attribute :dns, :kind_of => [String, Array]
+attribute :entrypoint, :kind_of => [String]
+attribute :env, :kind_of => [String, Array]
+attribute :expose, :kind_of => [Fixnum, String, Array]
 attribute :hostname, :kind_of => [String]
 attribute :id, :kind_of => [String]
+attribute :init_type, :kind_of => [FalseClass, String], :default => node['docker']['container_init_type']
+attribute :init_template, :kind_of => [String]
+attribute :link, :kind_of => [String]
+attribute :lxc_conf, :kind_of => [String, Array]
 attribute :memory, :kind_of => [Fixnum]
-attribute :port, :kind_of => [Fixnum]
-attribute :public_port, :kind_of => [Fixnum]
-attribute :running, :kind_of => [TrueClass, FalseClass]
-attribute :tty, :kind_of => [TrueClass, FalseClass]
-attribute :stdin, :kind_of => [TrueClass, FalseClass]
+# Fixnum kind_of port attribute is DEPRECATED
+attribute :port, :kind_of => [Fixnum, String, Array]
 attribute :privileged, :kind_of => [TrueClass, FalseClass]
+# public_port attribute is DEPRECATED
+attribute :public_port, :kind_of => [Fixnum]
+attribute :publish_exposed_ports, :kind_of => [TrueClass, FalseClass], :default => false
+attribute :remove_automatically, :kind_of => [TrueClass, FalseClass], :default => false
+attribute :running, :kind_of => [TrueClass, FalseClass]
+attribute :socket_template, :kind_of => [String]
+attribute :stdin, :kind_of => [TrueClass, FalseClass]
+attribute :tty, :kind_of => [TrueClass, FalseClass]
 attribute :user, :kind_of => [String]
-attribute :volume, :kind_of => [String]
+attribute :volume, :kind_of => [String, Array]
+attribute :volumes_from, :kind_of => [String]
+attribute :working_directory, :kind_of => [String]
