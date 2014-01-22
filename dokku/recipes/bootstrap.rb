@@ -7,8 +7,8 @@ bash 'set_locale' do
     export LANGUAGE=en_US.UTF-8
     export LANG=en_US.UTF-8
     export LC_ALL=en_US.UTF-8
-    locale-gen en_US.UTF-8
-    dpkg-reconfigure locales
+    sudo locale-gen en_US.UTF-8
+    sudo dpkg-reconfigure locales
   EOH
 end
 
