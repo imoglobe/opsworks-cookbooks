@@ -3,7 +3,7 @@
 end
 
 node[:deploy].each do |application, deploy|
-
+	Chef::Log.info(deploy)
 	if deploy[:domains]
 		
 		opsworks_deploy_dir do
