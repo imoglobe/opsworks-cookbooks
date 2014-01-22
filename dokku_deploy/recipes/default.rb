@@ -5,7 +5,7 @@ end
 node[:deploy].each do |application, deploy|
 	Chef::Log.info(deploy)
 	if deploy[:domains]
-		
+
 		opsworks_deploy_dir do
 			user deploy[:user]
 			group deploy[:group]
@@ -57,10 +57,5 @@ node[:deploy].each do |application, deploy|
 			end
 			action :create_if_missing
 		end
-		Chef::Log.info(deploy[:absolute_document_root])
-		execute "git push dokku@localhost:#{deploy[:domains].first} #{deploy[:scm][:revision]}"  do
-			command "git push dokku@localhost:#{deploy[:domains].first} #{deploy[:scm][:revision]}"
-			cwd deploy[:current_path]
-		end	
 	end
 end
