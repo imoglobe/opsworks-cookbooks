@@ -39,20 +39,12 @@ node[:deploy].each do |application, deploy|
 			app application
 		end
 
-		bash 'create ..app/' do
-			user "dokku"
-			code <<-EOH
-				mkdir #{node[:dokku][:root]}/#{deploy[:domains].first}
-			EOH
-			not_if "#{node[:dokku][:root]}/#{deploy[:domains].first}"
-		end
-
 		bash 'create ..app/ssl' do
 			user "dokku"
 			code <<-EOH
+				mkdir #{node[:dokku][:root]}/#{deploy[:domains].first}
 				mkdir #{node[:dokku][:root]}/#{deploy[:domains].first}/ssl
 			EOH
-			not_if "#{node[:dokku][:root]}/#{deploy[:domains].first}/ssl"
 		end
 
 		template "#{node[:dokku][:root]}/#{deploy[:domains].first}/ssl/server.crt" do
