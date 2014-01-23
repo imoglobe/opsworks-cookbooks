@@ -25,6 +25,7 @@ if node[:opsworks][:instance][:instance_type] == "t1.micro"
 end
 
 node[:deploy].each do |application, deploy|
+	
 	if deploy[:domains]
 
 		opsworks_deploy_dir do
@@ -46,7 +47,7 @@ node[:deploy].each do |application, deploy|
 					mkdir #{node[:dokku][:root]}/#{deploy[:domains].first}
 					mkdir #{node[:dokku][:root]}/#{deploy[:domains].first}/ssl
 				EOH
-				not_if ::File.directory?("#{node[:dokku][:root]}/#{deploy[:domains].first}/ssl"), :user => 'dokku', :group => 'dokku'
+				not_if {::File.directory?("#{node[:dokku][:root]}/#{deploy[:domains].first}/ssl")}, :user => 'dokku', :group => 'dokku'
 			end
 
 			template "#{node[:dokku][:root]}/#{deploy[:domains].first}/ssl/server.crt" do
