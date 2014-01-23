@@ -23,7 +23,8 @@ if node[:opsworks][:instance][:instance_type] == "t1.micro"
 		not_if 'grep -q "/var/swap.1 swap swap defaults 0 0" /etc/fstab'
 	end
 end
-
+Chef::Log.info('1q2w3e')
+Chef::Log.info(deploy[:user])
 node[:deploy].each do |application, deploy|
 
 	if deploy[:domains]
@@ -39,45 +40,51 @@ node[:deploy].each do |application, deploy|
 			app application
 		end
 
-		bash 'create ..app/ssl' do
-			user "dokku"
-			code <<-EOH
-				mkdir #{node[:dokku][:root]}/#{deploy[:domains].first}
-				mkdir #{node[:dokku][:root]}/#{deploy[:domains].first}/ssl
-			EOH
-		end
-
-		template "#{node[:dokku][:root]}/#{deploy[:domains].first}/ssl/server.crt" do
-			mode '0664'
-			owner 'dokku'
-			source "ssl.key.erb"
-			variables :key => deploy[:ssl_certificate]
-			only_if do
-				deploy[:ssl_support]
+		if deploy[:ssl_support] && deploy[:ssl_certificate] && deploy[:ssl_certificate_key]
+			bash 'create ..app/ssl' do
+				user 'dokku'
+				group 'dokku'
+				code <<-EOH
+					mkdir #{node[:dokku][:root]}/#{deploy[:domains].first}
+					mkdir #{node[:dokku][:root]}/#{deploy[:domains].first}/ssl
+				EOH
 			end
-			action :create_if_missing
-		end
 
-		template "#{node[:dokku][:root]}/#{deploy[:domains].first}/ssl/server.key" do
-			mode '0664'
-			owner 'dokku'
-			source "ssl.key.erb"
-			variables :key => deploy[:ssl_certificate_key]
-			only_if do
-				deploy[:ssl_support]
+			template "#{node[:dokku][:root]}/#{deploy[:domains].first}/ssl/server.crt" do
+				mode '0664'
+				owner 'dokku'
+				group 'dokku'
+				source "ssl.key.erb"
+				variables :key => deploy[:ssl_certificate]
+				only_if do
+					deploy[:ssl_support]
+				end
+				action :create_if_missing
 			end
-			action :create_if_missing
-		end
 
-		template "#{node[:dokku][:root]}/#{deploy[:domains].first}/ssl/server.ca" do
-			mode '0664'
-			owner 'dokku'
-			source "ssl.key.erb"
-			variables :key => deploy[:ssl_certificate_ca]
-			only_if do
-				deploy[:ssl_support] && deploy[:ssl_certificate_ca]
+			template "#{node[:dokku][:root]}/#{deploy[:domains].first}/ssl/server.key" do
+				mode '0664'
+				owner 'dokku'
+				group 'dokku'
+				source "ssl.key.erb"
+				variables :key => deploy[:ssl_certificate_key]
+				only_if do
+					deploy[:ssl_support]
+				end
+				action :create_if_missing
 			end
-			action :create_if_missing
+
+			template "#{node[:dokku][:root]}/#{deploy[:domains].first}/ssl/server.ca" do
+				mode '0664'
+				owner 'dokku'
+				group 'dokku'
+				source "ssl.key.erb"
+				variables :key => deploy[:ssl_certificate_ca]
+				only_if do
+					deploy[:ssl_support] && deploy[:ssl_certificate_ca]
+				end
+				action :create_if_missing
+			end
 		end
 
 		execute "git push dokku@localhost:#{deploy[:domains].first} #{deploy[:scm][:revision]}"  do
