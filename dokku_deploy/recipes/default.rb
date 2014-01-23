@@ -39,24 +39,24 @@ node[:deploy].each do |application, deploy|
 			app application
 		end
 
-		directory "#{node[:dokku][:root]}/#{deploy[:domains].first}" do
-			owner 'dokku'
-			group 'dokku'
-			recursive true
+		bash 'create ..app/' do
+			user "dokku"
+			code <<-EOH
+				mkdir #{node[:dokku][:root]}/#{deploy[:domains].first}
+			EOH
 			not_if "#{node[:dokku][:root]}/#{deploy[:domains].first}"
-			action :create
 		end
 
-		directory "#{node[:dokku][:root]}/#{deploy[:domains].first}/ssl" do
-			owner 'dokku'
-			group 'dokku'
-			recursive true
+		bash 'create ..app/ssl' do
+			user "dokku"
+			code <<-EOH
+				mkdir #{node[:dokku][:root]}/#{deploy[:domains].first}/ssl
+			EOH
 			not_if "#{node[:dokku][:root]}/#{deploy[:domains].first}/ssl"
-			action :create
 		end
 
 		template "#{node[:dokku][:root]}/#{deploy[:domains].first}/ssl/server.crt" do
-			mode '0600'
+			mode '0664'
 			owner 'dokku'
 			source "ssl.key.erb"
 			variables :key => deploy[:ssl_certificate]
@@ -67,7 +67,7 @@ node[:deploy].each do |application, deploy|
 		end
 
 		template "#{node[:dokku][:root]}/#{deploy[:domains].first}/ssl/server.key" do
-			mode '0600'
+			mode '0664'
 			owner 'dokku'
 			source "ssl.key.erb"
 			variables :key => deploy[:ssl_certificate_key]
@@ -78,7 +78,7 @@ node[:deploy].each do |application, deploy|
 		end
 
 		template "#{node[:dokku][:root]}/#{deploy[:domains].first}/ssl/server.ca" do
-			mode '0600'
+			mode '0664'
 			owner 'dokku'
 			source "ssl.key.erb"
 			variables :key => deploy[:ssl_certificate_ca]
