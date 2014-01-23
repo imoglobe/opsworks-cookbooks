@@ -39,11 +39,19 @@ node[:deploy].each do |application, deploy|
 			app application
 		end
 
+		directory "#{node[:dokku][:root]}/#{deploy[:domains].first}" do
+			owner 'dokku'
+			group 'dokku'
+			recursive true
+			not_if "#{node[:dokku][:root]}/#{deploy[:domains].first}"
+			action :create
+		end
+
 		directory "#{node[:dokku][:root]}/#{deploy[:domains].first}/ssl" do
 			owner 'dokku'
 			group 'dokku'
 			recursive true
-			not_if "#{node[:dokku][:root]}/#{deploy[:domains].first}" && "#{node[:dokku][:root]}/#{deploy[:domains].first}/ssl"
+			not_if "#{node[:dokku][:root]}/#{deploy[:domains].first}/ssl"
 			action :create
 		end
 
