@@ -23,10 +23,9 @@ if node[:opsworks][:instance][:instance_type] == "t1.micro"
 		not_if 'grep -q "/var/swap.1 swap swap defaults 0 0" /etc/fstab'
 	end
 end
-Chef::Log.info('1q2w3e')
-Chef::Log.info(deploy[:user])
 node[:deploy].each do |application, deploy|
-
+	Chef::Log.info('1q2w3e')
+	Chef::Log.info(deploy[:user])
 	if deploy[:domains]
 
 		opsworks_deploy_dir do
