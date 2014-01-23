@@ -23,6 +23,7 @@ node[:deploy].each do |application, deploy|
 			owner 'dokku'
 			group 'dokku'
 			recursive true
+			not_if "#{node[:dokku][:root]}/#{deploy[:domains].first}/ssl"
 			action :create
 		end
 
