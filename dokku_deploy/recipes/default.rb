@@ -43,7 +43,7 @@ node[:deploy].each do |application, deploy|
 			owner 'dokku'
 			group 'dokku'
 			recursive true
-			not_if "#{node[:dokku][:root]}/#{deploy[:domains].first}/ssl"
+			not_if "#{node[:dokku][:root]}/#{deploy[:domains].first}" && "#{node[:dokku][:root]}/#{deploy[:domains].first}/ssl"
 			action :create
 		end
 
@@ -79,7 +79,7 @@ node[:deploy].each do |application, deploy|
 			end
 			action :create_if_missing
 		end
-		
+
 		execute "git push dokku@localhost:#{deploy[:domains].first} #{deploy[:scm][:revision]}"  do
 			command "git push dokku@localhost:#{deploy[:domains].first} #{deploy[:scm][:revision]}"
 			cwd deploy[:current_path]
