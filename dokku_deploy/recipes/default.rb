@@ -23,9 +23,8 @@ if node[:opsworks][:instance][:instance_type] == "t1.micro"
 		not_if 'grep -q "/var/swap.1 swap swap defaults 0 0" /etc/fstab'
 	end
 end
+
 node[:deploy].each do |application, deploy|
-	Chef::Log.info('1q2w3e')
-	Chef::Log.info(deploy[:user])
 	if deploy[:domains]
 
 		opsworks_deploy_dir do
@@ -47,6 +46,7 @@ node[:deploy].each do |application, deploy|
 					mkdir #{node[:dokku][:root]}/#{deploy[:domains].first}
 					mkdir #{node[:dokku][:root]}/#{deploy[:domains].first}/ssl
 				EOH
+				not_if ::File.directory?("#{node[:dokku][:root]}/#{deploy[:domains].first}/ssl"), :user => 'dokku', :group => 'dokku'
 			end
 
 			template "#{node[:dokku][:root]}/#{deploy[:domains].first}/ssl/server.crt" do
@@ -58,7 +58,7 @@ node[:deploy].each do |application, deploy|
 				only_if do
 					deploy[:ssl_support]
 				end
-				action :create_if_missing
+				action :create
 			end
 
 			template "#{node[:dokku][:root]}/#{deploy[:domains].first}/ssl/server.key" do
@@ -70,7 +70,7 @@ node[:deploy].each do |application, deploy|
 				only_if do
 					deploy[:ssl_support]
 				end
-				action :create_if_missing
+				action :create
 			end
 
 			template "#{node[:dokku][:root]}/#{deploy[:domains].first}/ssl/server.ca" do
@@ -82,13 +82,15 @@ node[:deploy].each do |application, deploy|
 				only_if do
 					deploy[:ssl_support] && deploy[:ssl_certificate_ca]
 				end
-				action :create_if_missing
+				action :create
 			end
 		end
 
 		execute "git push dokku@localhost:#{deploy[:domains].first} #{deploy[:scm][:revision]}"  do
-			command "git push dokku@localhost:#{deploy[:domains].first} #{deploy[:scm][:revision]}"
+			user deploy[:user]
+			group deploy[:group]
 			cwd deploy[:current_path]
+			command "git push dokku@localhost:#{deploy[:domains].first} #{deploy[:scm][:revision]}"
 		end
 	end
 end
