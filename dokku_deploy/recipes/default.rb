@@ -1,9 +1,31 @@
 %w{deploy}.each do |dep|
-  include_recipe dep
+	include_recipe dep
+end
+
+bash 'set_locale' do
+	code <<-EOH
+		export LANGUAGE=en_US.UTF-8
+		export LANG=en_US.UTF-8
+		export LC_ALL=en_US.UTF-8
+		sudo locale-gen en_US.UTF-8
+		sudo dpkg-reconfigure locales
+	EOH
+end
+
+if node[:opsworks][:instance][:instance_type] == "t1.micro"
+	bash 'set_swap' do
+		code <<-EOH
+			sudo /bin/dd if=/dev/zero of=/var/swap.1 bs=1M count=1024
+			sudo /sbin/mkswap /var/swap.1
+			sudo /sbin/swapon /var/swap.1
+			sudo echo "/var/swap.1 swap swap defaults 0 0" >> /etc/fstab
+		EOH
+		not_if 'grep -q "/var/swap.1 swap swap defaults 0 0" /etc/fstab'
+	end
 end
 
 node[:deploy].each do |application, deploy|
-	Chef::Log.info(deploy)
+
 	if deploy[:domains]
 
 		opsworks_deploy_dir do
@@ -16,8 +38,6 @@ node[:deploy].each do |application, deploy|
 			deploy_data deploy
 			app application
 		end
-
-		Chef::Log.info(deploy)
 
 		directory "#{node[:dokku][:root]}/#{deploy[:domains].first}/ssl" do
 			owner 'dokku'
@@ -59,7 +79,7 @@ node[:deploy].each do |application, deploy|
 			end
 			action :create_if_missing
 		end
-		Chef::Log.info(deploy[:absolute_document_root])
+		
 		execute "git push dokku@localhost:#{deploy[:domains].first} #{deploy[:scm][:revision]}"  do
 			command "git push dokku@localhost:#{deploy[:domains].first} #{deploy[:scm][:revision]}"
 			cwd deploy[:current_path]

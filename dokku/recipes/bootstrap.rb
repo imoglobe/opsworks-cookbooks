@@ -2,29 +2,6 @@
 # We are doing it this way so we can allow chef to install/configure some of our dependencies
 # instead of allowing the bootstrap script to do it
 
-bash 'set_locale' do
-  code <<-EOH
-    export LANGUAGE=en_US.UTF-8
-    export LANG=en_US.UTF-8
-    export LC_ALL=en_US.UTF-8
-    sudo locale-gen en_US.UTF-8
-    sudo dpkg-reconfigure locales
-  EOH
-end
-
-Chef::Log.info(node[:opsworks][:instance][:instance_type])
-if node[:opsworks][:instance][:instance_type] == "t1.micro"
-  bash 'set_swap' do
-    code <<-EOH
-      sudo /bin/dd if=/dev/zero of=/var/swap.1 bs=1M count=1024
-    sudo /sbin/mkswap /var/swap.1
-    sudo /sbin/swapon /var/swap.1
-    sudo echo "/var/swap.1 swap swap defaults 0 0" >> /etc/fstab
-    EOH
-    not_if 'grep -q "/var/swap.1 swap swap defaults 0 0" /etc/fstab'
-  end
-end
-
 # Cookbook deps
 %w{apt git build-essential user}.each do |dep|
   include_recipe dep
