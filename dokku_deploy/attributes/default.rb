@@ -1,1 +1,0 @@
-default['dokku']['root'] = '/home/dokku'
